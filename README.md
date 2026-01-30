@@ -1,171 +1,171 @@
-🌿 Crop Disease Detection & Severity Estimation
+```markdown
+# 🌿 Crop Disease Detection & Severity Estimation
 
-An end-to-end deep learning system for tomato leaf disease classification and severity estimation, deployed as a Hugging Face Space using a hybrid FastAPI + Gradio architecture.
+An end-to-end **deep learning system** for **tomato leaf disease classification and severity estimation**, deployed as a **Hugging Face Space** using a **hybrid FastAPI + Gradio architecture**.
 
-This project goes beyond simple classification by estimating disease severity using Grad-CAM–based spatial analysis, making predictions more interpretable and actionable.
+This project goes beyond basic classification by estimating **disease severity** using **Grad-CAM–based spatial analysis**, making predictions more interpretable and practically useful.
 
-🚀 Live Demo
+---
 
-👉 Hugging Face Space
-https://huggingface.co/spaces/<your-username>/crop-disease-detection
+## 🚀 Live Demo
 
-Upload a tomato leaf image
+**Hugging Face Space**  
+👉 https://huggingface.co/spaces/utkarshsingh0013/crop-detection-detection
 
-Get:
+Upload a tomato leaf image to get:
+- Disease name
+- Prediction confidence
+- Estimated severity (%)
 
-Disease name
+---
 
-Prediction confidence
-
-Estimated severity (%)
-
-📌 Problem Statement
+## 📌 Problem Statement
 
 Most crop disease models only answer:
 
-“What disease is this?”
+> *“What disease is this?”*
 
-But in real agriculture, farmers also need to know:
+In real agricultural settings, farmers also need to know:
 
-“How severe is it?”
+> *“How severe is it?”*
 
 Severity determines:
+- urgency of treatment
+- choice of intervention
+- potential yield impact
 
-whether treatment is needed
+This project addresses both **disease identification** and **severity estimation** in a single pipeline.
 
-urgency of action
+---
 
-potential yield loss
+## 🧠 Solution Overview
 
-This project addresses both classification and severity estimation in a single pipeline.
+The system performs:
 
-🧠 Solution Overview
-What the system does
+1. **Disease Classification** using a CNN
+2. **Model Explainability** using Grad-CAM
+3. **Severity Estimation** using spatial activation analysis
+4. **Deployment** via API and interactive UI
 
-Classifies tomato leaf diseases using a CNN
+---
 
-Explains predictions using Grad-CAM
+## 🧩 System Architecture
 
-Estimates severity based on spatial activation
-
-Serves results via API and interactive UI
-
-🧩 Architecture
+```
 User (Browser)
- ├── Gradio UI (Hugging Face Space)
- │     └── Image Upload
- │
- └── FastAPI Backend (/api/predict)
-        ├── ResNet18 classifier
-        ├── Grad-CAM localization
-        ├── Leaf extraction (GrabCut)
-        └── Top-K severity computation
+├── Gradio UI (Hugging Face Space)
+│     └── Image Upload
+│
+└── FastAPI Backend (/api/predict)
+├── ResNet18 classifier
+├── Grad-CAM localization
+├── Leaf extraction (GrabCut)
+└── Top-K severity computation
+```
 
+- **Gradio** → interactive user interface  
+- **FastAPI** → reusable backend API  
+- **Docker** → reproducible deployment environment  
 
-Gradio → Human-friendly UI
+---
 
-FastAPI → Clean, reusable API
+## 🧪 Model Details
 
-Docker → Reproducible deployment
+- **Architecture**: ResNet18
+- **Pretraining**: ImageNet weights
+- **Dataset**: PlantVillage (Tomato subset)
+- **Number of classes**: 10
+- **Input size**: 224 × 224
+- **Training strategy**:
+  - Frozen backbone
+  - Trainable classification head
 
-🧪 Model Details
+---
 
-Backbone: ResNet18 (ImageNet weights)
+## 🟠 Disease Severity Estimation
 
-Dataset: PlantVillage (Tomato subset, 10 classes)
+### Why confidence is not severity
 
-Training strategy:
+- A model can be **highly confident** about a disease
+- The actual infected area may still be small
 
-Frozen backbone
+Hence, confidence ≠ severity.
 
-Trainable classifier head
+---
 
-Input size: 224 × 224
+### Severity Estimation Method
 
-Output:
+1. **Grad-CAM** highlights regions responsible for the prediction
+2. **Leaf-only masking** removes background influence (GrabCut)
+3. **Top-K CAM strategy**:
+   - Only the strongest activation regions are considered
+   - Prevents severity inflation due to diffuse attention
 
-Disease label
+### Severity Definition
 
-Confidence score
+> **Severity = percentage of leaf area belonging to the top-K disease-relevant regions**
 
-🟠 Disease Severity Estimation (Key Contribution)
-Why confidence ≠ severity
+This produces visually consistent and interpretable estimates.
 
-High confidence does not mean high damage
+---
 
-A small lesion can be classified confidently
+## 📊 Example Output
 
-How severity is estimated
-
-Grad-CAM highlights regions responsible for prediction
-
-Leaf-only masking removes background influence (GrabCut)
-
-Top-K CAM analysis:
-
-Only strongest activation regions are considered
-
-Avoids inflated severity from diffuse attention
-
-Severity definition
-
-Severity = percentage of leaf area belonging to the top-K disease-relevant regions
-
-This produces realistic, visually consistent estimates.
-
-📊 Output Example
+```json
 {
   "disease": "Tomato_Early_blight",
   "confidence": 0.93,
   "severity_percent": 20.0
 }
+````
 
-🖥️ User Interface (Gradio)
+---
+
+## 🖥️ User Interface (Gradio)
 
 The Gradio UI provides:
 
-Image upload
-
-One-click prediction
-
-Clear numerical outputs
+* Image upload
+* One-click prediction
+* Clear numerical outputs
 
 Designed for:
 
-Demonstrations
+* Demonstrations
+* Academic evaluation
+* Non-technical users
 
-Academic evaluation
+---
 
-Non-technical users
+## 🔌 API Endpoint (FastAPI)
 
-🔌 API Endpoint (FastAPI)
+### `POST /api/predict`
 
-The backend exposes a clean API:
+**Input**
 
-POST /api/predict
+* Image file (`.jpg`, `.png`)
 
-Input
+**Response**
 
-Image file (.jpg, .png)
-
-Response
-
+```json
 {
   "disease": "Tomato_Late_blight",
   "confidence": 0.91,
   "severity_percent": 27.5
 }
+```
 
+This API can be consumed by:
 
-This allows:
+* Web applications
+* Mobile apps
+* External services
 
-Mobile apps
+---
 
-Web apps
+## 📁 Project Structure
 
-Integration with other systems
-
-📁 Project Structure
+```
 crop-disease-detection/
 │
 ├── app/
@@ -173,7 +173,7 @@ crop-disease-detection/
 │   ├── api/               # API routes
 │   ├── core/              # ML logic (model, Grad-CAM, severity)
 │   ├── ui/                # Gradio UI
-│   └── config/            # Settings
+│   └── config/            # Configuration
 │
 ├── models/
 │   └── best_resnet.pth    # Trained model weights
@@ -181,69 +181,64 @@ crop-disease-detection/
 ├── Dockerfile
 ├── requirements.txt
 └── README.md
+```
 
-🐳 Deployment (Why Docker)
+---
 
-This project uses Docker because it requires:
+## 🐳 Deployment (Why Docker)
 
-OpenCV system dependencies
+Docker is used to ensure:
 
-FastAPI backend
+* consistent runtime environment
+* OpenCV system dependency support
+* reproducibility across machines
+* production-like deployment
 
-Gradio UI
+This is especially important for FastAPI + ML systems.
 
-Torch + torchvision compatibility
+---
 
-Docker ensures:
+## ⚠️ Limitations
 
-Reproducibility
+* Severity is **attention-based**, not pixel-level ground truth
+* Grad-CAM highlights **model evidence**, not medical diagnosis
+* Best suited for:
 
-Environment consistency
+  * academic projects
+  * demonstrations
+  * early-stage decision support
 
-Production-like behavior
+---
 
-⚠️ Limitations & Notes
+## 🔮 Future Improvements
 
-Severity is attention-based, not pixel-perfect segmentation
+* True lesion segmentation
+* Multi-crop support
+* Severity calibration per disease
+* Yield-loss estimation
 
-Grad-CAM highlights model evidence, not medical ground truth
+---
 
-Best suited for:
+## 🧠 Key Learnings
 
-Demos
+* Classification alone is insufficient for real-world ML systems
+* Explainability improves trust and debugging
+* Severity is a **designed metric**, not a free by-product
+* Backend architecture is as important as model accuracy
 
-Academic projects
+---
 
-Early-stage decision support
+## 📜 License
 
-Future upgrades:
+MIT License
 
-True lesion segmentation
+---
 
-Multi-crop support
+## 🙌 Acknowledgements
 
-Yield-loss estimation
+* PlantVillage Dataset
+* PyTorch & TorchVision
+* Hugging Face Spaces
+* Gradio & FastAPI
 
-🧠 Key Learnings
-
-Classification alone is insufficient for real-world ML systems
-
-Explainability helps validate and debug models
-
-Severity is a designed metric, not a free by-product
-
-Proper backend architecture matters as much as model accuracy
-
-📜 License
-
-MIT License — free to use, modify, and distribute.
-
-🙌 Acknowledgements
-
-PlantVillage dataset
-
-PyTorch & TorchVision
-
-Hugging Face Spaces
-
-Gradio & FastAPI
+```
