@@ -1,4 +1,4 @@
-```markdown
+
 # 🌿 Crop Disease Detection & Severity Estimation
 
 An end-to-end **deep learning system** for **tomato leaf disease classification and severity estimation**, deployed as a **Hugging Face Space** using a **hybrid FastAPI + Gradio architecture**.
